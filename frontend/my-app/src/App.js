@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import * as React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Account from './Account';
+import "./App.css"
+import Home from './home';
+import NavBar from './Navbar';
+import PersonalFolder from './PersonalFolders';
+import SharedFolder from './SharedFolder.js';
 
-function App() {
+export default function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="nav_context">
+      <NavBar></NavBar>
+      </div>
+
+      <div className="content">
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/personalFolders" element={<PersonalFolder />} />
+        <Route path="/sharedFolders" element={<SharedFolder/>} />
+        <Route path="/account" element={<Account />} />
+      </Routes>
+      </div>
     </div>
   );
 }
-
-export default App;

@@ -1,0 +1,21 @@
+.page_continut{
+    display: flex;
+
+}
+
+
+.sidebar{
+    width: 20%;
+    height: 450px;
+    background-color: #D2AEDE;
+ 
+    border-radius: 20px;
+}
+
+.Notes_Container{
+    width: 80%;
+    height: 450px;
+    background-color: #D2AEDE;
+    margin-left: 10px;
+    border-radius: 20px;
+}
