@@ -14,7 +14,6 @@
 - optiunea de a da drag&drop la imagini la notite
 - de asemenea se pot face fisiere publice ce pot fi partajate cu alti studenti
 - pot salva notitele sub forma de pdf
-- utilizatori o sa aiba si o sectiune de "To do list" si una e "Sticky Notes" 
 
 Link design: https://www.figma.com/file/WxfV7eSiB7idY1atAymDhK/TeamLavander?node-id=5%3A58&t=qzWMgZFaHFRffUEY-1
 
