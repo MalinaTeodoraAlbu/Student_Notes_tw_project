@@ -4,7 +4,6 @@ import "./styles/style.css"
 const SharedFolder = () => {
     return (  
         <div className='page_continut'>
-            <h1>Shared Folders</h1>
         <div className="sidebar">
 
          </div>
