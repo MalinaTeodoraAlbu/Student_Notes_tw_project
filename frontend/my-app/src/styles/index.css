@@ -12,6 +12,7 @@
 }
 
 .navbar ul {
+  margin: 15px;
   list-style-type: none;
   margin-left: auto;
   color: black;
@@ -20,7 +21,7 @@
 }
 
 .navbar  A{
-  margin-left: 16px;
+  margin-left: 30px;
   text-decoration: none;
   padding: 6px;
 }
@@ -58,7 +59,7 @@
 
 
 .navbar h1{
-
+  margin: 30px;
   color: #5d1b72;
   font-size: 20px;
   left: 20px;

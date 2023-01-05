@@ -1,10 +1,39 @@
+.container{
+    margin-top: 20px;
+    text-align: center;
+}
 .containerLog{
-    width: 50%;
+    margin: auto;
+    width: 30%;
     background-color: #D2AEDE;
     height: 450px;
     border-radius: 20px;
-    
 }
+
+
+.containerLog button {
+  margin-top: 40%;
+  background: #5d1b72;
+  border-radius: 999px;
+  box-shadow: #5d1b72 0 10px 20px -10px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  opacity: 1;
+  outline: 0 solid transparent;
+  padding: 8px 18px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: fit-content;
+  word-break: break-word;
+  border: 0;
+}
+
+
 
 p{
     position: relative;
