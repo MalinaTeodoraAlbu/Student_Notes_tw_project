@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Account from './Account';
-import "./App.css"
+import "./styles/App.css"
 import Home from './home';
 import NavBar from './Navbar';
 import PersonalFolder from './PersonalFolders';
