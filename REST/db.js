@@ -6,7 +6,8 @@ const sequelize = new Sequelize({
 });
 
 
-sequelize.sync({ alter: true }).then(() => {
+// sincronizare baza cu models
+sequelize.sync({ force: false }).then(() => {
   console.log("All the models have been synchronized");
 }); 
 

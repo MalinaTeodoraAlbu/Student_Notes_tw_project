@@ -1,7 +1,7 @@
 import { Note } from "../Models/model.js";
 import { Folder } from "../Models/model.js";
 import { User } from "../Models/model.js";
-import { Op } from "sequelize";
+import { UserFolder } from "../Models/model.js";
 import express from "express";
 
 
@@ -36,22 +36,7 @@ router.get('/users', async (req, res, next) => {
   router.get('/notes', async (req, res, next) => {
     try {
       const query = {}
-      /*
-      if (Object.keys(req.query).length !== 0) {
-        const { minSalary, simplified } = req.query
-        query.where = {}
-        if (minSalary) {
-          query.where.salary = {
-            [Op.gt]: req.query.minSalary
-          }
-        }
-        if (simplified === 'true') {
-          query.attributes = {
-            exclude: ['id']
-          }
-        }
-        
-      }*/
+   
       const notes = await Note.findAll(query)
       res.status(200).json(notes)
     } catch (err) {
@@ -59,6 +44,7 @@ router.get('/users', async (req, res, next) => {
     }
   })
 
+  
   
   router.get('/users/:eid', async (req, res, next) => {
     try {
@@ -230,4 +216,129 @@ router.get('/users', async (req, res, next) => {
       }
     })
   
+
+// get foldere user
+    router.get(
+      "/:userId/UserFolder",
+      async (req, response, next) => {
+        try {
+          const user = await User.findByPk(req.params.userId);
+      if (user) {
+        const folders = await user.getFolders();
+        if (folders.length > 0) {
+          response.json(folders);
+        }
+            else {
+              response.sendStatus(204);
+            }
+          } else {w
+            response.sendStatus(404);
+          }
+          
+        } catch (error) {
+          next(error);
+        }
+      }
+    );
+
+
+// post join
+    router.post(
+      "/:userId/UserFolder/:folderId",
+      async (req, res, next) => {
+        try {
+          const user = await User.findByPk(req.params.userId);
+          const folder = await Folder.findByPk(req.params.folderId);
+          if (user && folder) {
+            const newUserFolder = await UserFolder.create({
+              userId: req.params.userId,
+              folderId: req.params.folderId,
+              tip_stare: req.body.tip_stare
+            });
+            user.addFolder(folder);
+            user.save();
+            res.status(200).json(newUserFolder);
+          } else {
+            res.sendStatus(404);
+          }
+        } catch (error) {
+          next(error);
+        }
+      }
+    );
+
+//get user unui folder
+router.get(
+  "/folders/:folderId/UserFolder",
+  async (req, response, next) => {
+    try {
+      const folder = await Folder.findByPk(req.params.folderId);
+          if(folder){
+            const users = await folder.getUsers({ attributes: ["id","name"] });
+            if (users.length > 0) {
+              response.json(users);
+            }
+            else {
+              response.sendStatus(204);
+            }
+          } else {
+            response.sendStatus(404);
+          }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+
+
+
+router.post(
+  "/folders/:folderId/UserFolder/:userId",
+  async (req, response, next) => {
+    try {
+      const user = await User.findByPk(req.params.userId);
+      const folder = await Folder.findByPk(req.params.folderId);
+      if (folder && user) {
+        const newUserFolder = await UserFolder.create({
+          userId: req.params.userId,
+          folderId: req.params.folderId,
+          tip_stare: req.body.tip_stare
+        });
+        folder.addUser(user);
+        folder.save();
+        response.status(200).json(newUserFolder);
+        response.sendStatus(204);
+      } else {
+        response.sendStatus(400);
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+//sterge folderul unui user
+router.delete(
+  "/:userId/UserFolder/:folderId",
+  async (req, response, next) => {
+    try {
+      const user = await User.findByPk(req.params.userId);
+      const folder = await Folder.findByPk(req.params.folderId);
+      if (user && folder) {
+        user.removeFolder(folder);
+        user.save();
+        response.sendStatus(204);
+      } else {
+        response.sendStatus(404);
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+
+
+
   export { router as notiteRouter };
