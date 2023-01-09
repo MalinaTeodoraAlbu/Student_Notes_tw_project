@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../db.js";
+import moment from 'moment'
 
 
 
@@ -73,9 +74,6 @@ title:{
 context:{
     type: DataTypes.STRING,
     allowNull: false
-},
-date:{
-    type: DataTypes.DATE
 },
 tag:{
     type: DataTypes.STRING,

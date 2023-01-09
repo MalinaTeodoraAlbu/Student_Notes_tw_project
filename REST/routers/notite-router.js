@@ -338,7 +338,28 @@ router.delete(
   }
 );
 
-
-
+//get folder notes
+router.get(
+  "/:folderId/notes",
+  async (req, response, next) => {
+    try {
+      const folder = await Folder.findByPk(req.params.folderId);
+  if (folder) {
+    const notes = await folder.getNotes();
+    if (notes.length > 0) {
+      response.json(notes);
+    }
+        else {
+          response.sendStatus(204);
+        }
+      } else {w
+        response.sendStatus(404);
+      }
+      
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
   export { router as notiteRouter };
