@@ -6,6 +6,9 @@ import Home from './home';
 import NavBar from './Navbar';
 import PersonalFolder from './PersonalFolders';
 import SharedFolder from './SharedFolder.js';
+import Note from './Notes.js';
+import ViewNote from './ViewNote';
+import { useParams } from "react-router-dom";
 
 export default function App() {
   return (
@@ -20,6 +23,8 @@ export default function App() {
         <Route path="/personalFolders" element={<PersonalFolder />} />
         <Route path="/sharedFolders" element={<SharedFolder/>} />
         <Route path="/account" element={<Account />} />
+        <Route path='/notes' element={<Note/>}/>
+        <Route path="/viewNotes/:noteId" element={<ViewNote />} />
       </Routes>
       </div>
     </div>

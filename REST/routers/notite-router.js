@@ -75,7 +75,7 @@ router.get('/users', async (req, res, next) => {
   router.get('/notes/:eid', async (req, res, next) => {
     try {
       const note = await Note.findByPk(req.params.eid)
-      if (user) {
+      if (note) {
         res.status(200).json(note)
       } else {
         res.status(404).json({ message: 'not found' })
@@ -96,19 +96,25 @@ router.get('/users', async (req, res, next) => {
     }
   })
 
+  router.post('/addnotes', async (req, res, next) => {
+    try {
+      const newNote = await Note.create({
+        title: req.body.title,
+        context: req.body.context,
+        tag: req.body.tag,
+        userId: req.body.userId,
+        folderId: req.body.folderId
+      });
+      res.status(200).json(newNote);
+    } catch (err) {
+      next(err)
+    }
+  });
+
   router.post('/addfolders', async (req, res, next) => {
     try {
       const newFolder = await Folder.create(req.body)
       res.status(200).json(newFolder);
-    } catch (err) {
-      next(err)
-    }
-  })
-
-  router.post('/addnotes', async (req, res, next) => {
-    try {
-      const newNote = await Note.create(req.body)
-      res.status(200).json(newNote);
     } catch (err) {
       next(err)
     }
