@@ -11,15 +11,15 @@
 }
 
 .containerLog button {
-  margin-left: 40%;
   margin-top: 30%;
+  margin-left: 40%;
   background: #E1CCEC;
   border-radius: 999px;
   box-shadow: #E1CCEC 0 10px 20px -10px;
   box-sizing: border-box;
-  color: black;
+  color: #5d1b72;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 700;
   line-height: 24px;
   opacity: 1;
@@ -62,5 +62,9 @@
 
 .inputLogin:focus{
     outline: none;
+}
+
+h1{
+    color: #5d1b72;
 }
 
