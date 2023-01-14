@@ -4,17 +4,13 @@ const Login = () => {
     return ( 
         <div className="container">
             <div className="containerLog">
-                    <div className="borderWhite"> 
-                    <p >LOGIN</p></div>
-                    
-                    <p>email</p>
+                <div className="border"> 
+                    <p className="login">LOGIN</p>
+                </div>
                     <input className="inputLogin" type="text" id="login_input" placeholder="email"></input>
-                    <p>password</p>
                     <input className="inputLogin" type="text" id="login_input" placeholder="password"></input>
                     <button>Login</button>
-            
-                    </div>
-            <img src="" alt=""></img>
+            </div>
         </div>
      );
 }
