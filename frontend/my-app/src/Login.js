@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./styles/login.css"
 import store from "./store/store";
 import { useSelector, useDispatch } from 'react-redux';
-
+import { ToastContainer, toast } from 'react-toastify';
 
 const Login = () => {
 
@@ -55,6 +55,7 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     ></input>
                     <button onClick={login}>Login</button>
+                    <ToastContainer></ToastContainer>
             </div>
         </div>
      );
