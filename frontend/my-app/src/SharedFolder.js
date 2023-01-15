@@ -6,14 +6,17 @@ import { Link } from "react-router-dom";
 import iconsview from './media/icons8-view-64.png'
 import iconedit from './media/icons8-edit-file-64.png'
 import delecticon from './media/icons8-delete-file-64.png'
-
+import { useSelector } from 'react-redux';
 
 const SharedFolder = () => {
   const [selectedFolderId, setSelectedFolderId] = useState(null);
   const [folderName, setFolderName] = useState('');
-  const [folder, setFolders] = useState('');
-  const [userId] = useState(1);
-
+  const [folders, setFolders] = useState([]);
+  const userId = localStorage.getItem('userId');
+  
+  useEffect(() => {
+    refreshFolders();
+  }, []);
 
   const handleDelete = () => {
     if (selectedFolderId) {
@@ -88,8 +91,12 @@ const SharedFolder = () => {
          </div>
          <div className="Notes_Container">
           <div className='TopContainer'>
-          
-          <Link className="links" to="/notes">Add New Note</Link>
+         {selectedFolderId && folders.length > 0 ? 
+          <>
+            <Link className="links" to="/notes">Add New Note</Link>
+            <Link className="links" to={`/accesFolder/${selectedFolderId}`}>View Acces </Link>
+          </>
+        : null}
           </div>
           <div className="Notes">
           {selectedFolderId && <NoteList folderId={selectedFolderId} />}
@@ -99,8 +106,6 @@ const SharedFolder = () => {
  </div>
     );
 }
-
-
 
 const FolderList = (props) => {
   const [folders, setFolders] = useState([]);
@@ -142,7 +147,6 @@ const FolderList = (props) => {
 function NoteList(props) {
   const [notes, setNotes] = useState([]);
   const folderId = props.folderId;
-  const { userId } = props;
 
   const refreshNotes = () => {
     axios.get(`http://localhost:8081/notite-api/${folderId}/notes`)
@@ -186,7 +190,8 @@ function NoteList(props) {
           <Link to={`/viewNotes/${note.id}`}>
           <img src={iconsview} />
           </Link>
-          <img src={iconedit}/>
+          <Link to={`/notes/${note.id}`}> <img src={iconedit}/></Link>
+         
           <img src={delecticon} onClick={() => handleDeleteImg(note.id)}/>
           </div>
         </div>

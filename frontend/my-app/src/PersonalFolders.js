@@ -6,12 +6,20 @@ import { Link } from "react-router-dom";
 import iconsview from './media/icons8-view-64.png'
 import iconedit from './media/icons8-edit-file-64.png'
 import delecticon from './media/icons8-delete-file-64.png'
+import { useSelector, useDispatch } from 'react-redux';
+
 
 function PersonalFolder() {
-   const [selectedFolderId, setSelectedFolderId] = useState(null);
+  const [selectedFolderId, setSelectedFolderId] = useState(null);
   const [folderName, setFolderName] = useState('');
-  const [userId] = useState(1);
-  const [folder, setFolders] = useState('');
+  const userId = localStorage.getItem('userId');
+  const isLoggedIn = useSelector( (state) => state.isLoggedIn);
+  const [folders, setFolders] = useState([]);
+
+
+  useEffect(() => {
+    refreshFolders();
+  }, []);
 
   const handleDelete = () => {
     if (selectedFolderId) {
@@ -67,6 +75,11 @@ function PersonalFolder() {
     };
 
 
+    useEffect(() => {
+  
+    }, [selectedFolderId]);
+
+    
   return (  
      <div className='page_continut'>
            <div className='side'>
@@ -83,7 +96,14 @@ function PersonalFolder() {
          </div>
          <div className="Notes_Container">
           <div className='TopContainer'>
-          <Link className="links" to="/notes">Add New Note</Link>
+          {selectedFolderId && folders.length > 0 ? 
+          <>
+           <Link className="links" to="/notes">Add New Note</Link>
+           <div className='searchitems'>
+           </div>
+          </>
+        : null}
+        
           </div>
           <div className="Notes">
           {selectedFolderId && <NoteList folderId={selectedFolderId} />}
@@ -134,7 +154,6 @@ function FolderList(props) {
 function NoteList(props) {
   const [notes, setNotes] = useState([]);
   const folderId = props.folderId;
-  const { userId } = props;
 
   const refreshNotes = () => {
     axios.get(`http://localhost:8081/notite-api/${folderId}/notes`)
@@ -178,13 +197,13 @@ function NoteList(props) {
           <Link to={`/viewNotes/${note.id}`}>
           <img src={iconsview} />
           </Link>
-          <img src={iconedit}/>
+          <Link to={`/notes/${note.id}`}> <img src={iconedit}/></Link>
+         
           <img src={delecticon} onClick={() => handleDeleteImg(note.id)}/>
           </div>
         </div>
       ))}
     </div>
   );
-  }
-
+      }
 export default PersonalFolder;

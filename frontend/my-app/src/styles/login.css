@@ -1,69 +1,70 @@
 
-.page_continut {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+.container{
+    display: relative;
+    margin-top: 20px;
+}
 .containerLog{
-    width: 50%;
-    background-color: #BE9FE1;
+    margin: 0 auto;
+    width: 500px;
+    background-color: #C9B6E4;
     height: 450px;
     border-radius: 20px;
-    
 }
 
-p{
-    position: relative;
+.containerLog button {
+  margin-top: 30%;
+  margin-left: 40%;
+  background: #E1CCEC;
+  border-radius: 999px;
+  box-shadow: #E1CCEC 0 10px 20px -10px;
+  box-sizing: border-box;
+  color: #5d1b72;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
+  opacity: 1;
+  outline: 0 solid transparent;
+  padding: 8px 18px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: fit-content;
+  word-break: break-word;
+  border: 0;
+}
+
+.border{
     text-align: center;
-    top: 10px;
-    
-}
-
-.borderWhite{
+    padding-top: 10px;
     background-color: #E1CCEC;
     width: 100%;
-    height: 50px;
+    height: 40px;
     border-radius: 20px 20px 0 0;
 }
 
-.input_container{
-top: 25px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
 
 .inputLogin{
-    position: relative;
-    margin-bottom: 10px; 
-    margin-top: 20px;
+    top: 20px;
+    justify-content: space-between;
     border-radius: 15px;
     padding: 9px 25px;
     background-color: #E1CCEC;
-    border: none;
+    border:2px solid #E1CCEC;
     border-radius: 10px;
     cursor: pointer;
     width: 80%;
     display: block;
+    margin-bottom: 30px;
+    left:5%;
     height: 2em;
+    position: relative;
 }
 
-
-.input_container button{
-    border: none;
-    background-color:#E1CCEC;
-    cursor: pointer;
-    border-radius: 20px;
-    margin-top: 10px;
-    width: 250px;
-    height: 50px;
+.inputLogin:focus{
+    outline: none;
 }
 
-
-  
-
-.input_container button:hover {
-    background-color: #C9B6E4; 
-    transform: translateY(-2px); 
-  }
+h1{
+    color: #5d1b72;
+}

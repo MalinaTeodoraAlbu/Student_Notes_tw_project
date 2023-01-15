@@ -10,11 +10,19 @@ id:{
     autoIncrement: true,
     primaryKey:true
 },
-name:{
+firstName:{
     type: DataTypes.STRING,
     allowNull: false
 },
-surname:{
+lastName:{
+    type: DataTypes.STRING,
+    allowNull: false
+},
+university:{
+    type: DataTypes.STRING,
+    allowNull: false
+},
+year:{
     type: DataTypes.STRING,
     allowNull: false
 },

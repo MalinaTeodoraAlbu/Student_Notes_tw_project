@@ -56,14 +56,12 @@ body {
 .Notes {
   width: 99%;
   height: 400px;
-  
   margin-left: 10px;
   border-radius: 20px 0 0 20px;
   overflow-y: auto;
   bottom: 0;
 }
 .sidebar ul {
-    
     list-style-type: none;
     color: #444; 
     text-decoration: none;
@@ -79,7 +77,7 @@ body {
     background-color: #E1CCEC;
     margin-top: 10px;
     display: flex;
-    
+    margin-left: 5px;
     padding: 10px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); 
     transition:  0.2s ease-in-out; 
@@ -108,7 +106,7 @@ body {
     margin-top: 20px;
     margin: 20px;
     display: inline-block; 
-    width: 15%; 
+    width: 20%; 
     height: 150px; 
     background-color: #ffffff; 
     padding: 20px; 
@@ -118,6 +116,11 @@ body {
     
   }
   
+  h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+  }
+
   .note-tags {
     background-color: #F1F1F6;
     height: 40px;
@@ -128,11 +131,12 @@ body {
     position: absolute;
     bottom: 0;
     left:0;
+    
   }
 
   img {
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
     float: right;
     margin-right: 5px;
   }
@@ -179,14 +183,18 @@ body {
 }
 
 
-.TopContainer .links{
-  margin-top: 20px;
-  margin-left: 16px;
+ .links{
   text-decoration: none;
-  padding: 6px;
+  margin-right: 20px;
+  margin-left: 20px;
   color: #444;
-  
-  
+}
+
+.note-title {
+  max-height: 3.6em; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .links :hover {
@@ -196,5 +204,6 @@ body {
 .links :active {
   background-color: #5d1b72;
 }
+
 
 

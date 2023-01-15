@@ -2,13 +2,29 @@ import './styles/note.css'
 import ReactMarkdown from 'react-markdown'
 import {useState, useEffect} from 'react';
 import axios from 'axios';
-
+import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Note = () => {
     const [markDown, setMarkdown] = useState("");
     const [selectedOption, setSelectedOption] = useState('');
     const [folders, setFolders] = useState([]);
-    const [userId] = useState(1);
+    const userId = localStorage.getItem('userId');
+    const { noteId } = useParams();
+    console.log('noteid',noteId)
+    
+    useEffect(() => {
+        if(noteId){
+            fetch(`http://localhost:8081/notite-api/notes/${noteId}`)
+            .then(response => response.json())
+            .then(data => {
+                setMarkdown(data.context);
+                setSelectedOption(data.folderId);
+                document.getElementById("titleinput").value = data.title;
+                document.getElementById("taginput").value = data.tag;
+            });
+        }
+    }, [noteId])
 
     const handleSaveNote = async () => {
         try {
@@ -17,14 +33,27 @@ const Note = () => {
           const folderId = selectedOption;
           const context = markDown;
           const data = { title, context, tag,userId,folderId };
-          console.log(data);
-          const res = await fetch(`http://localhost:8081/notite-api/addnotes`,{
-              method: "post",
-              headers: {
-                  "Content-Type": "application/json",
-              },
-              body: JSON.stringify(data),
-          });
+          let res;
+          if(noteId){
+              res = await fetch(`http://localhost:8081/notite-api/updatenotes/${noteId}`,{
+                method: "put",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+              });
+              window.location.href =` /viewNotes/${noteId}`;
+          }else{
+              res = await fetch(`http://localhost:8081/notite-api/addnotes`,{
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+              });
+              window.location.href =` /personalFolders`;
+          }
+         
         } catch (err) {
           console.error(err);
         }
@@ -37,6 +66,7 @@ const Note = () => {
             <input className="tag" type="text" id="taginput" placeholder="Taggs"></input>
             <FolderList folders={folders} setFolders={setFolders}  selectedOption={selectedOption}  setSelectedOption={setSelectedOption}/>
             <button onClick={handleSaveNote} >SAVE</button>
+            <Link className="Link" to={`/personalFolders`}>Back</Link>
             </div>
 
             <div className='markdown_container'>
