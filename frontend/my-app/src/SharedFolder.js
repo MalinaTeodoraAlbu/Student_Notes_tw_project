@@ -139,7 +139,7 @@ const FolderList = (props) => {
   else{
     return (
       <div>
-        <p> 0 folders</p>
+        <p> 0 folders </p>
       </div>
   )}
 }
