@@ -64,7 +64,7 @@ const Note = () => {
             <div className='sidebar_notes'>
             <input className="title" type="text" id="titleinput" placeholder="Title"></input>
             <input className="tag" type="text" id="taginput" placeholder="Taggs"></input>
-            <FolderList folders={folders} setFolders={setFolders}  selectedOption={selectedOption}  setSelectedOption={setSelectedOption}/>
+            <FolderList userId={userId} folders={folders} setFolders={setFolders}  selectedOption={selectedOption}  setSelectedOption={setSelectedOption}/>
             <button onClick={handleSaveNote} >SAVE</button>
             <Link className="Link" to={`/personalFolders`}>Back</Link>
             </div>
@@ -83,13 +83,14 @@ const Note = () => {
 }
  
 
-const FolderList = ({folders, setFolders,selectedOption,setSelectedOption}) =>{
+const FolderList = ({userId, folders, setFolders,selectedOption,setSelectedOption}) =>{
     const [localFolders, setLocalFolders] = useState([]);
     const [filteredFolders, setFilteredFolders] = useState([]);
     const [selectedFolderId, setSelectedFolderId] = useState(''); 
+
   
     useEffect(() => {
-        axios.get('http://localhost:8081/notite-api/folders')
+        axios.get(`http://localhost:8081/notite-api/${userId}/UserFolder`)
             .then(res => setFolders(res.data))
             .catch(err => console.error(err));
     }, []);
