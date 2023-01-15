@@ -1,5 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../db.js";
+import moment from 'moment'
+
 
 
 const User = sequelize.define('user', {
@@ -8,11 +10,19 @@ id:{
     autoIncrement: true,
     primaryKey:true
 },
-name:{
+firstName:{
     type: DataTypes.STRING,
     allowNull: false
 },
-surname:{
+lastName:{
+    type: DataTypes.STRING,
+    allowNull: false
+},
+university:{
+    type: DataTypes.STRING,
+    allowNull: false
+},
+year:{
     type: DataTypes.STRING,
     allowNull: false
 },
@@ -21,7 +31,14 @@ email:{
     allowNull: false,
     unique: true,
     validate: {
-        isEmail: true
+        isEmail:{
+            msg: 'Invalid email adress'
+        },
+        isValidEmail(value){
+            if(!value.endsWith('@stud.ase.ro')){
+                throw Error('Only with institutional account!')
+            }
+        }
     }
 },
 password:{
@@ -32,19 +49,24 @@ password:{
     createdAt: false,
     updatedAt: false});
 
- const Folder = sequelize.define('folder', {
-        id:{
-            type:DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey:true
-        },
-        title:{
-            type: DataTypes.STRING,
-            allowNull: false
-        }},
-        {timestamps: false,
-            createdAt: false,
-            updatedAt: false});
+
+
+const Folder = sequelize.define('folder', {
+    id:{
+    type:DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey:true
+    },
+    title:{
+    type: DataTypes.STRING,
+    allowNull: false
+    }},
+    {
+    timestamps: false,
+    createdAt: false,
+    updatedAt: false
+    }
+);
 
             
 const Note = sequelize.define('note', {
@@ -61,10 +83,10 @@ context:{
     type: DataTypes.STRING,
     allowNull: false
 },
-date:{
-    type: DataTypes.DATE
+tag:{
+    type: DataTypes.STRING,
+    allowNull: false
 },
-
 },
 {
     timestamps: false,
@@ -73,17 +95,17 @@ date:{
 });
 
 
+const UserFolder = sequelize.define('UserFolder',{
+    tip_stare:{
+        type: DataTypes.STRING,
+        allowNull: false
+    }
+});
 
-User.hasMany(Folder);
 User.hasMany(Note);
-
-Folder.belongsTo(User);
 Folder.hasMany(Note);
-
-Note.belongsTo(Folder);
-Note.hasMany(User);
+User.belongsToMany(Folder, { through: 'UserFolder' });
+Folder.belongsToMany(User, { through: 'UserFolder' });
 
 export { 
-    User, Folder, Note 
-}
-
+    User, Folder, Note,UserFolder}

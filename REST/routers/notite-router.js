@@ -1,7 +1,8 @@
 import { Note } from "../Models/model.js";
 import { Folder } from "../Models/model.js";
 import { User } from "../Models/model.js";
-import { Op } from "sequelize";
+import { UserFolder } from "../Models/model.js";
+import bcrypt from 'bcrypt';
 import express from "express";
 
 
@@ -35,30 +36,22 @@ router.get('/users', async (req, res, next) => {
   //get all notes
   router.get('/notes', async (req, res, next) => {
     try {
-      const query = {}
-      /*
-      if (Object.keys(req.query).length !== 0) {
-        const { minSalary, simplified } = req.query
-        query.where = {}
-        if (minSalary) {
-          query.where.salary = {
-            [Op.gt]: req.query.minSalary
-          }
+        let query = {}
+        if(req.query.search){
+            query = {
+                $or: [
+                    { title: { $regex: req.query.search } },
+                    { tag: { $regex: req.query.search } }
+                ]
+            }
         }
-        if (simplified === 'true') {
-          query.attributes = {
-            exclude: ['id']
-          }
-        }
-        
-      }*/
-      const notes = await Note.findAll(query)
-      res.status(200).json(notes)
+        const notes = await Note.findAll(query)
+        res.status(200).json(notes)
     } catch (err) {
-      next(err)
+        next(err)
     }
-  })
-
+})
+  
   
   router.get('/users/:eid', async (req, res, next) => {
     try {
@@ -89,7 +82,7 @@ router.get('/users', async (req, res, next) => {
   router.get('/notes/:eid', async (req, res, next) => {
     try {
       const note = await Note.findByPk(req.params.eid)
-      if (user) {
+      if (note) {
         res.status(200).json(note)
       } else {
         res.status(404).json({ message: 'not found' })
@@ -103,17 +96,8 @@ router.get('/users', async (req, res, next) => {
   // insert
   router.post('/addusers', async (req, res, next) => {
     try {
-      const newUser = await User.create(req.body, ['name','surname','email','password'])
+      const newUser = await User.create(req.body, ['name','firstName','lastName','university','year','email','password'])
       res.status(200).json(newUser);
-    } catch (err) {
-      next(err)
-    }
-  })
-
-  router.post('/addfolders', async (req, res, next) => {
-    try {
-      const newFolder = await Folder.create(req.body)
-      res.status(200).json(newFolder);
     } catch (err) {
       next(err)
     }
@@ -121,8 +105,23 @@ router.get('/users', async (req, res, next) => {
 
   router.post('/addnotes', async (req, res, next) => {
     try {
-      const newNote = await Note.create(req.body)
+      const newNote = await Note.create({
+        title: req.body.title,
+        context: req.body.context,
+        tag: req.body.tag,
+        userId: req.body.userId,
+        folderId: req.body.folderId
+      });
       res.status(200).json(newNote);
+    } catch (err) {
+      next(err)
+    }
+  });
+
+  router.post('/addfolders', async (req, res, next) => {
+    try {
+      const newFolder = await Folder.create(req.body)
+      res.status(200).json(newFolder);
     } catch (err) {
       next(err)
     }
@@ -135,7 +134,7 @@ router.get('/users', async (req, res, next) => {
       try{
         const user = await User.findByPk(req.params.userId);
         if(user){
-          await user.update(req.body,{fields: ['name','surname','email','password']});
+          await user.update(req.body,{fields: ['name','firstName','lastName','university','year','email','password']});
          
           return res.status(200).json({message: 'accepted'});
         }else{
@@ -230,4 +229,263 @@ router.get('/users', async (req, res, next) => {
       }
     })
   
+
+// get foldere user
+    router.get(
+      "/:userId/UserFolder",
+      async (req, response, next) => {
+        try {
+          const user = await User.findByPk(req.params.userId);
+      if (user) {
+        const folders = await user.getFolders();
+        if (folders.length > 0) {
+          response.json(folders);
+        }
+            else {
+              response.sendStatus(204);
+            }
+          } else {w
+            response.sendStatus(404);
+          }
+          
+        } catch (error) {
+          next(error);
+        }
+      }
+    );
+
+
+// post join
+    router.post(
+      "/:userId/UserFolder/:folderId",
+      async (req, res, next) => {
+        try {
+          const user = await User.findByPk(req.params.userId);
+          const folder = await Folder.findByPk(req.params.folderId);
+          if (user && folder) {
+            const newUserFolder = await UserFolder.create({
+              userId: req.params.userId,
+              folderId: req.params.folderId,
+              tip_stare: req.body.tip_stare
+            });
+            user.addFolder(folder);
+            user.save();
+            res.status(200).json(newUserFolder);
+          } else {
+            res.sendStatus(404);
+          }
+        } catch (error) {
+          next(error);
+        }
+      }
+    );
+
+//get user unui folder
+router.get(
+  "/folders/:folderId/UserFolder",
+  async (req, response, next) => {
+    try {
+      const folder = await Folder.findByPk(req.params.folderId);
+          if(folder){
+            const users = await folder.getUsers({ attributes: ["id","name"] });
+            if (users.length > 0) {
+              response.json(users);
+            }
+            else {
+              response.sendStatus(204);
+            }
+          } else {
+            response.sendStatus(404);
+          }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+
+
+
+router.post(
+  "/folders/:folderId/UserFolder/:userId",
+  async (req, response, next) => {
+    try {
+      const user = await User.findByPk(req.params.userId);
+      const folder = await Folder.findByPk(req.params.folderId);
+      if (folder && user) {
+        const newUserFolder = await UserFolder.create({
+          userId: req.params.userId,
+          folderId: req.params.folderId,
+          tip_stare: req.body.tip_stare
+        });
+        folder.addUser(user);
+        folder.save();
+        response.status(200).json(newUserFolder);
+        response.sendStatus(204);
+      } else {
+        response.sendStatus(400);
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+//sterge folderul unui user
+router.delete(
+  "/:userId/UserFolder/:folderId",
+  async (req, response, next) => {
+    try {
+      const user = await User.findByPk(req.params.userId);
+      const folder = await Folder.findByPk(req.params.folderId);
+      if (user && folder) {
+        user.removeFolder(folder);
+        user.save();
+        response.sendStatus(204);
+      } else {
+        response.sendStatus(404);
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+//get folder notes
+router.get(
+  "/:folderId/notes",
+  async (req, response, next) => {
+    try {
+      const folder = await Folder.findByPk(req.params.folderId);
+  if (folder) {
+    const notes = await folder.getNotes();
+    if (notes.length > 0) {
+      response.json(notes);
+    }
+        else {
+          response.sendStatus(204);
+        }
+      } else {
+        response.sendStatus(404);
+      }
+      
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.get(
+  "/:userId/notes/users",
+  async (req, response, next) => {
+    try {
+      const user = await User.findByPk(req.params.userId);
+  if (user) {
+    const notes = await user.getNotes();
+    if (notes.length > 0) {
+      response.json(notes);
+    }
+        else {
+          response.sendStatus(204);
+        }
+      } else {
+        response.sendStatus(404);
+      }
+      
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+
+
+
+router.post('/login', async (req, res, next) => {
+  try {
+     
+      const { email, password } = req.body;
+      console.log(email,password)
+      const user = await User.findOne({ where: {email: email} });
+      console.log(user)
+      if(user) {
+        if(password == user.password){
+          res.status(200).json({ success: true, userId: user.id });
+        } else {
+              res.status(401).json({ success: false, message: "Invalid email or password" });
+          }
+
+      } else {
+          res.status(401).json({ success: false, message: "Invalid email or password" });
+      }
+  } catch (err) {
+      next(err)
+  }
+});
+
+router.post('/folders/:folderId/access', (req, res) => {
+  const { folderId } = req.params;
+  const { email } = req.body;
+
+  if (!email || !folderId) {
+    res.status(400).json({ error: 'email and folder id are required' });
+    return;
+  }
+
+  User.findOne({ where: { email } })
+    .then((user) => {
+      if (!user) {
+        res.status(404).json({ error: 'User not found' });
+        return;
+      }
+      return Folder.findOne({ where: { id: folderId } })
+        .then((folder) => {
+          if (!folder) {
+            res.status(404).json({ error: 'Folder not found' });
+            return;
+          }
+          return user.addFolder(folder, { through: { tip_stare: 'shared' } });
+        })
+        .then(() => res.status(200).json({ message: 'Access granted!' }))
+    })
+    .catch((err) => res.status(500).json({ error: err.message }));
+});
+
+router.get('/folders/:folderId/access', (req, res) => {
+  const { folderId } = req.params;
+  
+  UserFolder.findAll({ where: { folderId: folderId } })
+  .then((userFolders) => {
+  const userIds = userFolders.map((userFolder) => userFolder.userId);
+  return User.findAll({ where: { id: userIds } }, 'email');
+  })
+  .then((users) => {
+  const emails = users.map((user) => user.email);
+  res.status(200).json({ emails });
+  })
+  .catch((err) => res.status(500).json({ error: err.message }));
+  });
+
+  router.delete(
+    '/folders/:folderId/access/:email',
+    async (req, res, next) => {
+      try {
+        const folderId = req.params.folderId;
+        const email = req.params.email;
+
+        const user = await User.findOne({ where: { email: email } });
+  
+        if (user) {
+
+          await UserFolder.destroy({ where: { userId: user.id, folderId: folderId } });
+          res.sendStatus(204);
+        } else {
+          res.sendStatus(404);
+        }
+      } catch (error) {
+        next(error);
+      }
+    }
+  );
+
   export { router as notiteRouter };
