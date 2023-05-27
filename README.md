@@ -1,19 +1,12 @@
+//Functionalities:
+Login section (you can only log in with an institutional account)
+The application can be used on any type of device
+The user can choose the font, size, and color of the text if desired
+The user can apply bold, italic, and underline formatting
+Notes are categorized
+Notes can be viewed, edited, or deleted
+Sorting of notes can be done by various criteria 
+Option add images into notes
+Ability to create public files that can be shared with other students
 
-# //Functionalitati:
-- parte de login ( te poti loga doar cu contul institutional) 
-- aplicatia poate fi folosita pe orice tip de dispozitiv
-- utilizatorul isi poate alege font-ul, size-ul cat si culoarea textului, de asemenea daca vrea
-- poate folosi bold, italic, underline
-- posibilitatea de a adauga tabel, elemente geometrice...
-- are posibilitatea de a desenea peste notite
-- utilizatorul isi poate alege un template pentru notita (blank, dictando, math) + format
-- (A4, A3, letter.. etc)
-- notitele sunt impartite pe categorii
-- notitele pot fi vizualizate, editate sau sterse
-- sortarea notitelor se poate face dupa mai multe criterii (alfabetic, dupa data, cuvinte cheie)
-- optiunea de a da drag&drop la imagini la notite
-- de asemenea se pot face fisiere publice ce pot fi partajate cu alti studenti
-- pot salva notitele sub forma de pdf
-
-Link design: https://www.figma.com/file/WxfV7eSiB7idY1atAymDhK/TeamLavander?node-id=5%3A58&t=qzWMgZFaHFRffUEY-1
-
+Design link: https://www.figma.com/file/WxfV7eSiB7idY1atAymDhK/TeamLavander?node-id=5%3A58&t=qzWMgZFaHFRffUEY-1
